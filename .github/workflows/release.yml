@@ -19,10 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get version
-        id: get_version
-        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\/v/}
-
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -37,7 +33,7 @@ jobs:
         run: |
           cargo build --release
           strip target/release/spr
-          tar vczC target/release/ spr >spr-${{ steps.get_version.outputs.version }}-${{ matrix.name }}.tar.gz
+          tar vczC target/release/ spr >spr-${{ github.sha }}-${{ matrix.name }}.tar.gz
           ls -lh spr-*.tar.gz
 
       - name: Upload artifacts
